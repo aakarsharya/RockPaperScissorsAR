@@ -1,11 +1,37 @@
 import os
 import sys
 import cv2
+from training import hands
 
 cap = cv2.VideoCapture(0)
 n_samples = sys.argv[1]
-hands = {'rock': 0, 'paper': 1, 'scissors': 2, 'other': 3}
 font = cv2.FONT_HERSHEY_PLAIN
+
+# Dataset augmentation
+def horizontalFlip(img):
+    return cv2.flip(img, 1)
+
+def verticalFlip(img):
+    return cv2.flip(img, 0)
+
+def grayScale(img):
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+def rotate(img, angle):
+    return cv2.rotate(img, angle)
+
+def augment():
+    for hand in hands.keys():
+        for filename in os.listdir(hand):
+            img = cv2.imread(os.path.join(hand, filename))
+            filename = filename.split('.')[0]
+            cv2.imwrite(filename=os.path.join(hand, "{}_hflip.jpg".format(filename)), img=horizontalFlip(img))
+            cv2.imwrite(filename=os.path.join(hand, "{}_vflip.jpg".format(filename)), img=verticalFlip(img))
+            cv2.imwrite(filename=os.path.join(hand, "{}_grayscale.jpg".format(filename)), img=grayScale(img))
+            cv2.imwrite(filename=os.path.join(hand, "{}_rotate90cw.jpg".format(filename)), 
+                img=rotate(img, cv2.ROTATE_90_CLOCKWISE))
+            cv2.imwrite(filename=os.path.join(hand, "{}_rotate90ccw.jpg".format(filename)), 
+                img=rotate(img, cv2.ROTATE_90_COUNTERCLOCKWISE))
 
 for hand in hands.keys():
     count = 1
@@ -41,3 +67,4 @@ for hand in hands.keys():
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+augment()

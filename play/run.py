@@ -1,12 +1,17 @@
 import cv2
 import os
 import numpy as np
-from keras.models import load_model
+
+# importing custom modules
+import sys
+sys.path.append('..')
+from training.train import ConvNet
+from training import hands
 
 cap = cv2.VideoCapture(0)
-hands = {'rock': 0, 'paper': 1, 'scissors': 2, 'other': 3}
 font = cv2.FONT_HERSHEY_PLAIN
-model = load_model("rps_model.h5")
+model = ConvNet()
+model.load()
 count = 0
 
 def getHand(idx):
@@ -30,22 +35,18 @@ while True:
 
     cv2.imshow("Play", frame)
 
-    # print("You played ", hand)
-    k = cv2.waitKey(1)
-    if k%256 == 27:
+    key = cv2.waitKey(1)
+    if key % 256 == 27:
         # ESC pressed
         print("Escape hit, closing...")
         break
-    elif k%256 == 32:
+    elif key % 256 == 32:
         # SPACE pressed
         # store sample image
         img = frame[100:500, 100:500]
         cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, (227, 227))
-        print(img.shape)
-        # prediction
-        prediction = model.predict(np.asarray([img]))
-        hand = getHand(np.argmax(prediction))
+        hand = model.predict(img)
         print("you chose ", hand)
 
 # When everything done, release the capture
