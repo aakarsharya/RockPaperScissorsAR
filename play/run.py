@@ -42,12 +42,11 @@ while True:
         break
     elif key % 256 == 32:
         # SPACE pressed
-        # store sample image
         img = frame[100:500, 100:500]
         cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, (227, 227))
         hand = model.predict(img)
-        print("you chose ", hand)
+        print("you chose", hand)
 
 # When everything done, release the capture
 cap.release()
