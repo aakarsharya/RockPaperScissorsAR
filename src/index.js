@@ -4,7 +4,6 @@ import io from 'socket.io-client';
 // Connecting to multiplayer server
 var socket = io("http://127.0.0.1:8000/");
 
-
 // Initialize doc elements
 var video = document.getElementById("videoElement");
 var playButton = document.getElementById("playButton");
@@ -21,17 +20,8 @@ selfImgCtx.font = "240px sans-serif";
 var opponentImgCtx = opponentImageCanvas.getContext('2d');
 opponentImgCtx.font = "240px sans-serif";
 var selfImg = new Image();
-// selfImg.onload = function() {
-//     selfImageCanvas.width = 170;
-//     selfImageCanvas.height = 170;
-//     selfImgCtx.drawImage(selfImg, 0, 0, 170, 170);
-// }
 var oppImg = new Image();
-// oppImg.onload = function() {
-//     opponentImageCanvas.width = 170;
-//     opponentImageCanvas.height = 170;
-//     opponentImgCtx.drawImage(oppImg, 0, 0, 170, 170);
-// }
+
 
 // SOCKET IO CHANNELS
 socket.on('connect', function() {
@@ -82,9 +72,11 @@ function updateRoomStatus(text) {
     roomStatusUpdates.appendChild(li);
 }
 
+
 video.onplay = function() {
     setTimeout(drawImg , 300);
 };
+
 
 function drawImg(){
     canvas.width = video.videoWidth;
@@ -101,14 +93,17 @@ function drawImg(){
     setTimeout(drawImg , 100);
 }
 
+
 createRoomButton.onclick = async function() {
     socket.emit('create_room');
 }
+
 
 joinRoomButton.onclick = async function() {
     var roomID = joinRoomInput.value.toUpperCase();
     socket.emit('join_room', {'room': roomID});
 }
+
 
 playButton.onclick = async function() {
     var tempCanvas = document.getElementById('tempCanvas');
@@ -120,6 +115,7 @@ playButton.onclick = async function() {
 
     socket.emit('play', {'imageURL': img});
 }
+
 
 function drawRoundResults(result) {
     for (var k in result) {
