@@ -18,7 +18,6 @@ body {
     display: inline-block;
 }
 
-
 #videoElement {
     width: 640px;
     height: 480px;
@@ -35,34 +34,75 @@ body {
     float:left;
 }
 
-#roomStatusBox {
+#handImageSelf {
     margin-left: 2.5%;
-    display: inline-block;
-    width: 400px;
-    height: 480px;
-    background-color: rgb(240, 220, 200);
-    border: 7px rgb(120, 30, 35) solid;
-    color: rgb(120, 30, 35);
-    text-align: center;
-    font-size: 12px;
-    font-family: 'Press Start 2P';
-    letter-spacing: .1rem;
-    text-transform: uppercase;
-    text-decoration: none;
-    white-space: nowrap;
-    background-color: rgb(240, 220, 200);
+    border: 7px rgb(240, 220, 200) solid;
     border-radius: 4px;
-    overflow-wrap: break-word;
-    overflow-y: auto;
+    width: 170px;
+    height: 170px;
+    background-color: transparent;
 }
 
-#tempCanvas {
-    display: none;
+#handImageOpponent {
+    margin-left: 3%;
+    border: 7px rgb(120, 30, 35) solid;
+    border-radius: 4px;
+    width: 170px;
+    height: 170px;
+    background-color: transparent;
+}
+
+#handImageHeader {
+    margin-left: 2.3%;
+    margin-bottom: 0.5%;
+    color: rgb(240, 220, 200);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    font-family: 'Press Start 2P';
 }
 
 #roomStatusHeader {
     font-family: 'Press Start 2P';
     color: rgb(120, 30, 35);
+    font-size: 14px;
+    text-align: center;
+}
+
+#roomStatusBox {
+    margin-left: 2.5%;
+    display: inline-block;
+    width: 400px;
+    height: 240px;
+    background-color: rgb(240, 220, 200);
+    border: 7px rgb(120, 30, 35) solid;
+    color: rgb(120, 30, 35);
+    font-size: 12px;
+    font-family: 'Press Start 2P';
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-radius: 4px;
+    overflow: auto;
+}
+
+
+#roomStatusUpdates {
+    width: 400px;
+    height: 480px;
+    list-style: none;
+    font-size: 11px;
+    font-family: 'Press Start 2P';
+    padding: 2%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    overflow-y: auto;
+    word-break: break-all;
+}
+
+#tempCanvas {
+    display: none;
 }
 
 #userActions {
@@ -83,6 +123,40 @@ body {
     font-family: 'Press Start 2P';
 }
 
+#score {
+    color: rgb(240, 220, 200);
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    /* margin: 0 auto; */
+    font-family: 'Press Start 2P';
+}
+
+#joinRoomInput {
+    display: inline-block;
+    height: 38px;
+    padding: 0 30px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 38px;
+    letter-spacing: .1rem;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+    border-radius: 4px;
+    cursor: pointer;
+    box-sizing: border-box; 
+    font-family: 'Press Start 2P';
+    margin-left: 1%;
+    margin-right: 1%;
+    color: rgb(120, 30, 35);
+    border: 3px rgb(120, 30, 35) solid;
+    background-color:  rgb(240, 220, 200);
+}
+
 /* Buttons */
 .button,
 button,
@@ -92,7 +166,6 @@ input[type="button"] {
   display: inline-block;
   height: 38px;
   padding: 0 30px;
-  color: rgb(240, 220, 200);
   text-align: center;
   font-size: 12px;
   font-weight: 600;
@@ -101,14 +174,15 @@ input[type="button"] {
   text-transform: uppercase;
   text-decoration: none;
   white-space: nowrap;
-  background-color: rgb(120, 30, 35);
   border-radius: 4px;
-  border: 2px solid rgb(240, 220, 200);
   cursor: pointer;
   box-sizing: border-box; 
   font-family: 'Press Start 2P';
-  margin-left: 2%;
-  margin-right: 2%;
+  margin-left: 1%;
+  margin-right: 1%;
+  color: rgb(240, 220, 200);
+  border: 2px solid rgb(240, 220, 200);
+  background-color: rgb(120, 30, 35);
 }
 
 .button:hover,
@@ -123,9 +197,7 @@ input[type="reset"]:focus,
 input[type="button"]:focus {
   color: rgb(120, 30, 35);
   border: 2px solid rgb(120, 30, 35);
-  /* border-color: rgb(120, 30, 35); */
   background-color: rgb(240, 220, 200);
-  outline: 0; 
 }
 
 .button.button-primary,
@@ -133,10 +205,9 @@ button.button-primary,
 input[type="submit"].button-primary,
 input[type="reset"].button-primary,
 input[type="button"].button-primary {
-  color: rgb(115, 30, 30);
-  border: 2px solid rgb(120, 30, 35);
-  /* border-color: rgb(115, 30, 30);  */
-  background-color: rgb(240, 220, 200);
+    color: rgb(240, 220, 200);
+    border: 2px solid rgb(240, 220, 200);
+    background-color: rgb(115, 30, 30);
 }
 
 .button.button-primary:hover,
@@ -149,10 +220,9 @@ button.button-primary:focus,
 input[type="submit"].button-primary:focus,
 input[type="reset"].button-primary:focus,
 input[type="button"].button-primary:focus {
-  color:rgb(115, 30, 30);
-  background-color: rgb(240, 220, 200);
-  /* border-color: rgb(240, 220, 200);  */
-  border: 2px solid rgb(120, 30, 35);
+    color:rgb(115, 30, 30);
+    border: 2px solid rgb(120, 30, 35);
+    background-color: rgb(240, 220, 200);
 }
 
 .halo {
