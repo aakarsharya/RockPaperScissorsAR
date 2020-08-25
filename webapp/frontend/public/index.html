@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Rock, Paper, Scissors</title>
+    <link href='https://fonts.googleapis.com/css?family=Press Start 2P' rel='stylesheet'>
+    <script src="../src/index.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<!-- <style src="../"></style> -->
+
+<body>
+    <!-- title font -->
+    <div id="title" style="text-align: center;">
+        <div class="vintage__container">
+            <p class="vintage vintage__top">ROCK PAPER SCISSORS AR</p>
+            <p class="vintage vintage__bot">ROCK PAPER SCISSORS AR</p>
+            <p class="outro--large">The classic game, now using Computer Vision for hand gesture detection.</p>
+        </div>
+    </div>
+    <!-- title font -->
+    <div id="score">
+            <p style="display: inline-block; text-align: center;"> Wins: </p> <p id="win" style="display: inline-block; text-align: center;">0 </p>
+            <p style="display: inline-block; text-align: center;"> Ties: </p><p id="tie" style="display: inline-block; text-align: center;">0 </p>
+            <p style="display: inline-block; text-align: center;"> Losses: </p><p id="loss" style="display: inline-block; text-align: center;">0 </p>
+    </div>
+    <div id="container">
+        <video autoplay="true" id="videoElement"></video>
+        <canvas id="videoCanvas"></canvas>
+        <div id="roomStatusBox">
+            <p id="roomStatusHeader">Room Status</p>
+            <ul id="roomStatusUpdates"></ul>
+        </div>
+        <div id="handImages">
+            <p id="handImageHeader">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; You 
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Opponent</p>
+            <canvas id="handImageSelf"></canvas>
+            <canvas id="handImageOpponent"></canvas>
+        </div>
+    </div>
+    <div>
+        <div id="userActions">
+            <button id="playButton">Play</button>
+            <button id="createRoomButton">Create Room</button>
+            <input id="joinRoomInput" placeholder="enter room id">
+            <button id="joinRoomButton">Join Room</button>
+        </div>
+        <p id="instructions">
+            Place your hand in the box. Make sure your entire hand fits in <br>
+            the box, the lighting is bright, and the background is plain.
+        </p>
+    </div>
+    <canvas id="tempCanvas"></canvas>
+    <script>
+
+    </script>
+</body>
+
+</html>
