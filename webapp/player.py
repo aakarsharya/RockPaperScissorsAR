@@ -2,9 +2,25 @@ import time
 
 class Player(object):
     def __init__(self, sid):
-        self.game_history = {'wins': 0, 'losses': 0, 'ties': 0}
         self.hand = 'other'
-        self.id = sid
+        self.sid = sid
+        self.ready = False
+        self.img = None
 
-    def updateScore(self, score: str):
-        self.game_history[score] += 1
+    def to_json(self):
+        return {
+            'hand': self.hand,
+            'sid': self.sid,
+            'ready': self.ready
+        }
+    
+    def updateHand(self, hand, img):
+        self.hand = hand
+        self.ready = True
+        self.img = img
+
+    def unready(self):
+        self.ready = False
+
+    def isReady(self):
+        return self.ready

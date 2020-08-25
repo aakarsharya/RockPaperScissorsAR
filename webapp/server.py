@@ -18,10 +18,10 @@ import base64
 from io import BytesIO
 from PIL import Image
 
-socketio = sio.Server()
+socketio = sio.Server(cors_allowed_origins='*')
 app = Flask(__name__)
-app.wsgi_app = sio.WSGIApp(socketio, app.wsgi_app)
 CORS(app)
+app.wsgi_app = sio.WSGIApp(socketio, app.wsgi_app)
 
 # Custom ML Model
 model = ConvNet()
@@ -29,11 +29,9 @@ model.load()
 
 ROOMS = {}
 
-########## ROUTING FLASK API CALLS #########
-@app.route('/predict', methods=['POST'])
-def predict():
-    print("Image Received...")
-    data = request.get_json()
+
+########## HELPER FUNCTIONS ##########
+def processImage(data):
     imageURL = data['imageURL'].replace('data:image/jpeg;base64,' ,'')
     imgBytes = base64.b64decode(imageURL)
     img = Image.open(BytesIO(imgBytes))
@@ -41,23 +39,23 @@ def predict():
     img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     img = cv2.resize(img, (227, 227))
     cv2.imwrite(filename="sampleImage.jpg", img=img)
-    prediction = model.predict(img)
-    print(prediction)
-    return {"prediction": prediction}
+    return img
 
 
 def findPlayer(sid):
     for room_id, room in ROOMS.items():
-        if sid in room.players:
+        if room.containsPlayer(sid):
             return {'found': True, 'room': room_id}
     return {'found': False, 'room': None}
 
 
+########## SOCKET IO FUNCTIONS ##########
 def leaveRoom(sid, room):
     socketio.emit(
         'room_status', 
-        data={'status': "SUCCESS - Player ({0}) has left the room ({1}).".format(sid, room)},
-        room=room
+        data={'status': "Opponent left room {}.".format(room)},
+        room=room, 
+        skip_sid=sid
     )
     socketio.leave_room(sid=sid, room=room)
     ROOMS[room].removePlayer(sid)
@@ -66,7 +64,7 @@ def leaveRoom(sid, room):
     if ROOMS[room].numPlayers == 0:
         socketio.emit(
             'room_status',
-            data={'status': "INFO - Closing empty room ({}).".format(room)},
+            data={'status': "Closing empty room ({}).".format(room)},
             room=room
         )
         socketio.close_room(room=room)
@@ -77,24 +75,33 @@ def joinRoom(sid, room):
     if ROOMS[room].numPlayers < 2:
         socketio.enter_room(room=room, sid=sid)
         ROOMS[room].addPlayer(sid)
+
+        # Notify opponent
         socketio.emit(
             'room_status', 
-            data={'status': "SUCCESS - Player ({0}) has joined the room ({1}).".format(sid, room)},
-            room=room
+            data={'status': "Opponent has joined room {}.".format(room)},
+            room=room,
+            skip_sid=sid
         )
-        # return {'success': True}
-    
-    else:
+
+        # Notify client that they were able to join room
         socketio.emit(
             'room_status', 
-            {'status': "ERROR - Player ({0}) cannot join room ({1}), room is full.".format(sid, room)},
+            data={'status': "You joined room {}.".format(room)},
             to=sid
         )
-        # return {'success': False}
+    
+    else:
+        # Notify client that they were not able to join room
+        socketio.emit(
+            'room_status', 
+            {'status': "Sorry, room {} is full.".format(room)},
+            to=sid
+        )
 
 
 def printRoomOccupants():
-    print('ROOMS AND THEIR PLAYERS:')
+    print('\nROOMS AND THEIR PLAYERS:')
     print('\n----------------------------------\n')
     for room in ROOMS.values():
         print(room.to_json())
@@ -119,7 +126,7 @@ def createRoom(sid):
         leaveRoom(sid, playerData['room'])
         
     printRoomOccupants()
-    # return room
+
 
 @socketio.on('join_room')
 def onJoin(sid, data):
@@ -138,16 +145,49 @@ def onJoin(sid, data):
     else:
         socketio.emit(
             'room_status', 
-            data={'status': "ERROR - Cannot join room: {}, room does not exist.".format(data['room'])},
+            data={'status': "Sorry, room {} does not exist.".format(data['room'])},
             to=sid
         )
     
     printRoomOccupants()
 
+
 @socketio.on('leave_room')
 def onLeave(sid, data):
     if data['room'] in ROOMS.keys():
         leaveRoom(sid, data['room'])
+
+    printRoomOccupants()
+
+
+@socketio.on('play')
+def play(sid, data):
+    img = processImage(data)
+    prediction = model.predict(img)
+    print('prediction:', prediction)
+    playerData = findPlayer(sid)
+    room = playerData['room']
+    player = ROOMS[room].getPlayer(sid)
+    player.updateHand(prediction, data['imageURL'])
+    
+    if ROOMS[room].isReady():
+        print('both players are ready')
+        result = ROOMS[room].play()
+        print(result)
+        socketio.emit(
+            'score', 
+            data=result,
+            room=room
+        )
+        printRoomOccupants()
+
+    else:
+        print('waiting for opponent')
+        socketio.emit(
+            'room_status', 
+            data={'status': "Waiting for opponent."},
+            to=sid
+        )
 
     printRoomOccupants()
 
@@ -161,5 +201,4 @@ def testMessage(sid, data):
     
 
 if __name__ == '__main__':
-    # socketio.run(app, port=8000)
     app.run(debug=True, port=8000)
