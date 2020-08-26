@@ -4,7 +4,6 @@ argon2-cffi==20.1.0
 astroid==2.3.2
 astunparse==1.6.3
 attrs==19.3.0
-awscli==1.16.274
 backcall==0.2.0
 bleach==3.1.5
 boto3==1.10.14
