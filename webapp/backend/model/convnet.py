@@ -2,9 +2,9 @@ import os
 import cv2
 import time
 import numpy as np
-from keras import Sequential
-from keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
-from keras.models import load_model
+from tensorflow.keras import Sequential
+from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
+from tensorflow.keras.models import load_model
 from sklearn.model_selection import train_test_split
 
 hands = {'rock': 0, 'paper': 1, 'scissors': 2, 'other': 3}
@@ -32,7 +32,7 @@ class ConvNet(object):
         self.model.add(Dropout(dropout))
         self.model.add(Dense(256, activation='relu'))
         self.model.add(Dense(4, activation='softmax'))
-        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics='accuracy')
+        self.model.compile(loss='categorical_crossentropy', optimizer='rmsprop')
 
     def preprocess(self):
         start = time.time()
@@ -49,11 +49,11 @@ class ConvNet(object):
         print("time taken for preprocessing and labelling", end - start)
         return np.array(images), labels
 
-    def train(self, epochs=3, evaluate=False):
+    def train(self, epochs=3):
         images, labels = self.preprocess()
         Xtrain, Xtest, Ytrain, Ytest = train_test_split(images, labels, test_size=0.15, shuffle=True)
         history = self.model.fit(x=Xtrain, y=Ytrain, epochs=epochs)
-        self.model.save(os.path.join("..", "rps_model2.h5"))
+        self.model.save(os.path.join("..", "rps_model2_tfkeras.h5"))
 
     def load(self, path):
         self.model = load_model(path)
