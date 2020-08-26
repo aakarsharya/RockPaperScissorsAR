@@ -53,7 +53,7 @@ class ConvNet(object):
         images, labels = self.preprocess()
         Xtrain, Xtest, Ytrain, Ytest = train_test_split(images, labels, test_size=0.15, shuffle=True)
         history = self.model.fit(x=Xtrain, y=Ytrain, epochs=epochs)
-        self.model.save(os.path.join("..", "rps_model2_tfkeras.h5"))
+        self.model.save(os.path.join("..", "rps_model2_tfkeras"))
 
     def load(self, path):
         self.model = load_model(path)
