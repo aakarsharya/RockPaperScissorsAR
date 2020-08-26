@@ -171,6 +171,7 @@ def disconnect(sid):
 def play(sid, data):
     img = processImage(data)
     prediction = model.predict(img)
+    print('prediction:', prediction)
     playerData = findPlayer(sid)
     room = playerData['room']
     player = ROOMS[room].getPlayer(sid)
