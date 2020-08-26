@@ -14,6 +14,7 @@ import numpy as np
 import base64
 from io import BytesIO
 from PIL import Image
+import urllib.request
 
 socketio = sio.Server(cors_allowed_origins='*')
 app = Flask(__name__)
@@ -21,7 +22,7 @@ app.wsgi_app = sio.WSGIApp(socketio, app.wsgi_app)
 
 # Custom ML Model
 model = ConvNet()
-model.load()
+model.load("model/rps_model2.h5")
 
 ROOMS = {}
 
@@ -31,8 +32,9 @@ def processImage(data):
     imgBytes = base64.b64decode(imageURL)
     img = Image.open(BytesIO(imgBytes))
     img  = np.array(img)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img = cv2.resize(img, (227, 227))
+    img = np.reshape(img, (227,227,1))
     return img
 
 
