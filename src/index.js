@@ -16,9 +16,9 @@ var ctx = canvas.getContext('2d');
 var selfImageCanvas = document.getElementById('handImageSelf');
 var opponentImageCanvas = document.getElementById('handImageOpponent');
 var selfImgCtx = selfImageCanvas.getContext('2d');
-selfImgCtx.font = "240px sans-serif";
+selfImgCtx.font = "240px Arial";
 var opponentImgCtx = opponentImageCanvas.getContext('2d');
-opponentImgCtx.font = "240px sans-serif";
+opponentImgCtx.font = "240px Arial";
 var selfImg = new Image();
 var oppImg = new Image();
 
@@ -119,14 +119,13 @@ playButton.onclick = async function() {
 
 function drawRoundResults(result) {
     for (var k in result) {
-        console.log(k);
+        console.log(result[k]['hand']);
         if (k === socket.id) {
             // eslint-disable-next-line
             selfImg.onload = function() {
                 selfImageCanvas.width = 170;
                 selfImageCanvas.height = 170;
                 selfImgCtx.drawImage(selfImg, 0, 0, 170, 170);
-                selfImgCtx.fillText(result[k]['hand'], 85, 150);
             }
             selfImg.src = result[k]['img'];
         }
@@ -136,9 +135,9 @@ function drawRoundResults(result) {
                 opponentImageCanvas.width = 170;
                 opponentImageCanvas.height = 170;
                 opponentImgCtx.drawImage(oppImg, 0, 0, 170, 170);
-                opponentImgCtx.fillText(result[k]['hand'], 85, 150);
             }
             oppImg.src = result[k]['img'];
         }
+
     }
 }
