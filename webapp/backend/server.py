@@ -3,6 +3,7 @@ from model.convnet import ConvNet
 
 # Server + Socket Libraries
 from flask import Flask
+from flask_cors import CORS
 import socketio as sio # Python SocketIO Client Library
 
 # Gameplay 
@@ -18,6 +19,7 @@ from PIL import Image
 
 socketio = sio.Server(cors_allowed_origins='*')
 app = Flask(__name__)
+CORS(app)
 app.wsgi_app = sio.WSGIApp(socketio, app.wsgi_app)
 
 # Custom ML Model
