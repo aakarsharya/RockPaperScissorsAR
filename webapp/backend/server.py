@@ -14,7 +14,7 @@ import numpy as np
 import base64
 from io import BytesIO
 from PIL import Image
-import urllib.request
+
 
 socketio = sio.Server(cors_allowed_origins='*')
 app = Flask(__name__)
@@ -192,6 +192,5 @@ def play(sid, data):
 
     printRoomOccupants()
     
-
 if __name__ == '__main__':
-    app.run(debug=True, port=8000)
+    app.run()
