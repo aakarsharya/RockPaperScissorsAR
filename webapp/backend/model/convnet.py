@@ -2,6 +2,7 @@ import os
 import cv2
 import time
 import numpy as np
+import tensorflow as tf
 from tensorflow.keras import Sequential
 from tensorflow.keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from tensorflow.keras.models import load_model
@@ -59,5 +60,7 @@ class ConvNet(object):
         self.model = load_model(path)
 
     def predict(self, img):
-        prediction = self.model.predict(np.asarray([img]))
+        img = np.asarray([img])
+        img = tf.cast(img, tf.float32)
+        prediction = self.model.predict(img)
         return getHand(np.argmax(prediction))

@@ -24,7 +24,7 @@ app.wsgi_app = sio.WSGIApp(socketio, app.wsgi_app)
 
 # Custom ML Model
 model = ConvNet()
-model.load("model/rps_model_tfkeras")
+model.load("model/rps_model3.h5")
 
 ROOMS = {}
 
