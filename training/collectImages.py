@@ -1,8 +1,8 @@
 import os
 import sys
 import cv2
-from training import hands
 
+hands = {'rock': 0, 'paper': 1, 'scissors': 2, 'other': 3}
 cap = cv2.VideoCapture(0)
 n_samples = sys.argv[1]
 font = cv2.FONT_HERSHEY_PLAIN
@@ -21,13 +21,18 @@ def rotate(img, angle):
     return cv2.rotate(img, angle)
 
 def augmentImages():
+    # Convert all images to grayscale
+    for hand in hands.keys():
+        for filename in os.listdir(hand):
+            img = cv2.imread(os.path.join(hand, filename))
+            cv2.imwrite(filename=os.path.join(hand, filename), img=grayScale(img))
+
     for hand in hands.keys():
         for filename in os.listdir(hand):
             img = cv2.imread(os.path.join(hand, filename))
             filename = filename.split('.')[0]
             cv2.imwrite(filename=os.path.join(hand, "{}_hflip.jpg".format(filename)), img=horizontalFlip(img))
             cv2.imwrite(filename=os.path.join(hand, "{}_vflip.jpg".format(filename)), img=verticalFlip(img))
-            cv2.imwrite(filename=os.path.join(hand, "{}_grayscale.jpg".format(filename)), img=grayScale(img))
             cv2.imwrite(filename=os.path.join(hand, "{}_rotate90cw.jpg".format(filename)), 
                 img=rotate(img, cv2.ROTATE_90_CLOCKWISE))
             cv2.imwrite(filename=os.path.join(hand, "{}_rotate90ccw.jpg".format(filename)), 

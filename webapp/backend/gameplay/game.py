@@ -1,6 +1,6 @@
 import random
 import string
-from player import Player
+from gameplay.player import Player
 
 
 class Game(object):

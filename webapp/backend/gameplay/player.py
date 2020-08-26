@@ -7,9 +7,9 @@ class Player(object):
 
     def to_json(self):
         return {
-            # 'hand': self.hand,
+            'hand': self.hand,
             'sid': self.sid,
-            # 'ready': self.ready
+            'ready': self.ready
         }
     
     def updateHand(self, hand, img):

@@ -1,14 +1,13 @@
 import os
-import sys
 import cv2
 import time
 import numpy as np
-import tensorflow as tf
 from keras import Sequential
 from keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from keras.models import load_model
 from sklearn.model_selection import train_test_split
-from training import hands
+
+hands = {'rock': 0, 'paper': 1, 'scissors': 2, 'other': 3}
 
 def getHand(idx):
     for key, val in hands.items():
@@ -54,10 +53,10 @@ class ConvNet(object):
         images, labels = self.preprocess()
         Xtrain, Xtest, Ytrain, Ytest = train_test_split(images, labels, test_size=0.15, shuffle=True)
         history = self.model.fit(x=Xtrain, y=Ytrain, epochs=epochs)
-        self.model.save(os.path.join("..", "rps_model.h5"))
+        self.model.save(os.path.join("..", "rps_model2.h5"))
 
-    def load(self):
-        self.model = load_model("rps_model.h5")
+    def load(self, path):
+        self.model = load_model(path)
 
     def predict(self, img):
         prediction = self.model.predict(np.asarray([img]))

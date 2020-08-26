@@ -3,7 +3,6 @@ import sys
 import cv2
 import time
 import numpy as np
-import tensorflow as tf
 from keras import Sequential
 from keras.layers import Flatten, Dense, Dropout, Conv2D, MaxPooling2D
 from keras.models import load_model
