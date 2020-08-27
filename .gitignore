@@ -3,6 +3,7 @@ training/rock/
 training/paper/
 training/scissors/
 training/other/
+webapp/backend/venv_backend/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

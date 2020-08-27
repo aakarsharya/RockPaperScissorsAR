@@ -2,7 +2,12 @@ import './index.css';
 import io from 'socket.io-client';
 
 // Connecting to multiplayer server
-var socket = io("http://127.0.0.1:8000/");
+
+// LOCAL TESTING
+// var socket = io("http://127.0.0.1:8000/");
+
+// REMOTE SERVER
+var socket = io("https://rock-paper-scissors-ar.herokuapp.com/");
 
 // Initialize doc elements
 var video = document.getElementById("videoElement");
